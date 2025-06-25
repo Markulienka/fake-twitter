@@ -23,7 +23,7 @@ export default function Input({ onAddTweet }: InputProps) {
             />
             <button
                 onClick={handleSumbit}
-                className="bg-blue-500 text-white rounded p-2"
+                className="bg-blue-500 text-white rounded p-2 cursor-pointer"
             >
                 Send
             </button>

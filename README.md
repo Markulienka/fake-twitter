@@ -14,49 +14,20 @@ fake-twitter/
 
 ---
 
-## Backend
-
-- Built with NestJS
-- Provides an API to manage tweets (create, fetch, delete)
-- Data is stored only in server memory (in-memory), no database persistence
-- CORS enabled to allow frontend requests
-
-
-### Running the backend
-
-```bash
-cd backend
-npm install
-npm run start:dev
-```
-The backend runs at http://localhost:3000
-
-### API Endpoints
-- GET /tweets — fetch all current tweets
-- POST /tweets — create a new tweet (body: { text: string, name: string }), generates a unique ID automatically
-- DELETE /tweets/:id — delete a tweet by its ID
-
----
-
-## Frontend
-- Built with React + Vite
-- Communicates with backend via REST API
-
-### Running the frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-The frontend runs at http://localhost:5173 
-
----
-
 ## How it works
+
 - On app load, the frontend fetches all tweets from GET /tweets and displays them.
 - Users can add a new tweet via a form, which sends a POST /tweets request to the backend.
 - The backend creates the tweet with a unique ID and returns it; the frontend adds it to the top of the list.
 - Users can delete tweets, triggering a DELETE /tweets/:id request; if successful, the tweet is removed from the frontend list.
 - All tweets are stored only in backend memory, so data is lost if the backend server restarts.
 - The frontend does not store tweets locally (no localStorage); all data is always fetched from the backend
+
+---
+
+## More info
+
+Each part of the project contains its own detailed README file:
+
+- [`frontend/README.md`](./frontend/README.md) – how to run the frontend
+- [`backend/README.md`](./backend/README.md) – how to run the backend
