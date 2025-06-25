@@ -4,16 +4,6 @@ This project is a simple Twitter-like application split into backend API and fro
 
 ---
 
-## Project Structure
-
-fake-twitter/
-├── backend/     # NestJS backend API
-├── frontend/    # React + Vite frontend
-├── .gitignore
-└── README.md
-
----
-
 ## How it works
 
 - On app load, the frontend fetches all tweets from GET /tweets and displays them.
