@@ -1,5 +1,5 @@
 export type Tweet = {
-  id: string;
+  id: number;
   text: string;
   name: string;
 };

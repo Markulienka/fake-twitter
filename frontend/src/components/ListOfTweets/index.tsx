@@ -2,7 +2,7 @@ import type { Tweet } from "../../types";
 
 interface ListOfTweetsProps {
     tweets: Tweet[];
-    onDelete?: (id: string) => void;
+    onDelete?: (id: number) => void;
 }
 
 export default function TweetList({ tweets, onDelete }: ListOfTweetsProps) {
