@@ -1,24 +1,25 @@
 import { Controller, Get, Post, Body, Delete, Param } from '@nestjs/common';
 import { TweetService } from './tweet.service';
-import { Tweet } from '../types';
+import { CreateTweetDto } from './dto/create-tweet.dto';
+import { TweetDto } from './dto/tweet.dto';
 
 @Controller('tweets')
 export class TweetController {
   constructor(private readonly tweetService: TweetService) {}
 
   @Get()
-  getAllTweets(): Tweet[] {
+  async getAllTweets(): Promise<TweetDto[]> {
     return this.tweetService.getAllTweets();
   }
-
+  
   @Post()
-  createTweet(@Body() body: { text: string; name: string }): Tweet {
-    return this.tweetService.createTweet(body.text, body.name);
+  async createTweet(@Body() createTweetDto: CreateTweetDto): Promise<TweetDto> {
+    return this.tweetService.createTweet(createTweetDto);
   }
 
   @Delete(':id')
-  deleteTweet(@Param('id') id: string): { success: boolean } {
-    const deleted = this.tweetService.deleteTweet(Number(id));
+  async deleteTweet(@Param('id') id: string): Promise<{ success: boolean }> {
+    const deleted = await this.tweetService.deleteTweet(id);
     return { success: deleted };
   }
 }

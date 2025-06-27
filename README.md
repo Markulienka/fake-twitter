@@ -1,17 +1,53 @@
 # Fake Twitter
 
-This project is a simple Twitter-like application split into backend API and frontend client.
+This project is a full-stack Twitter-like application with user authentication, tweet management, and like functionality.
+
+**Tech Stack:**
+- **Backend:** NestJS, MongoDB, JWT authentication
+- **Frontend:** React, TypeScript, Vite, TailwindCSS
+
+---
+
+## Features
+
+### Authentication
+- User registration and login with JWT tokens
+- Secure password hashing with bcrypt
+- JWT-based user identity (no separate userId/username storage)
+- Automatic token validation and logout for invalid/expired tokens
+
+### Tweet Management
+- Create, view, and delete tweets
+- Each tweet shows author name and like count
+- Real-time updates after tweet operations
+
+### Like System
+- Like/unlike tweets with heart icons (❤️/🤍)
+- Efficient like state management using dedicated likes collection
+- Single API call to fetch all user's liked tweets
+- Optimistic UI updates for better user experience
+
+### Data Persistence
+- All data stored in MongoDB database
+- Persistent user accounts and tweet history
+- Dedicated collections for users, tweets, and likes
 
 ---
 
 ## How it works
 
-- On app load, the frontend fetches all tweets from GET /tweets and displays them.
-- Users can add a new tweet via a form, which sends a POST /tweets request to the backend.
-- The backend creates the tweet with a unique ID and returns it; the frontend adds it to the top of the list.
-- Users can delete tweets, triggering a DELETE /tweets/:id request; if successful, the tweet is removed from the frontend list.
-- All tweets are stored only in backend memory, so data is lost if the backend server restarts.
-- The frontend does not store tweets locally (no localStorage); all data is always fetched from the backend
+### User Flow
+1. **Login/Signup:** Users register or login, receiving a JWT token
+2. **Home Page:** Displays all tweets with correct like states for the logged-in user
+3. **Tweet Creation:** Users can create new tweets that appear immediately
+4. **Like/Unlike:** Toggle likes with real-time count updates
+5. **Delete:** Users can delete their own tweets
+
+### Technical Flow
+- **Authentication:** JWT tokens contain userId and username, stored only in localStorage
+- **Tweet Loading:** Single API call fetches all tweets + single call for user's liked tweet IDs
+- **Like Management:** Efficient POST/DELETE endpoints for like/unlike operations
+- **State Sync:** Frontend state always reflects backend data after operations
 
 ---
 
