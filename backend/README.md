@@ -1,7 +1,5 @@
 # Backend – Fake Twitter API
 
-# Backend – Fake Twitter API
-
 This is the backend API for the Fake Twitter project, built with [NestJS](https://nestjs.com), [MongoDB](https://www.mongodb.com/), and JWT authentication.  
 It provides secure endpoints for user authentication, tweet management, and like functionality with persistent data storage.
 
