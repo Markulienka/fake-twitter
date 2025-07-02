@@ -8,7 +8,7 @@ export default function AuthToggle({ isSignUp, onToggle }: AuthToggleProps) {
     <div className="mt-6 text-center">
       <button
         onClick={onToggle}
-        className="text-blue-600 hover:text-blue-800 text-sm"
+        className="text-blue-600 hover:text-blue-800 text-sm cursor-pointer"
       >
         {isSignUp 
           ? 'Already have an account? Sign In' 

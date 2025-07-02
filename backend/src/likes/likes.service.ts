@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Like, LikeDocument } from './schemas/like.schema';
-import { Tweet, TweetDocument } from '../tweet/schemas/tweet.schema';
+import { Like, LikeDocument } from './like.schema';
+import { Tweet, TweetDocument } from '../tweets/tweet.schema';
 
 @Injectable()
-export class LikeService {
+export class LikesService {
   constructor(
     @InjectModel(Like.name) private likeModel: Model<LikeDocument>,
     @InjectModel(Tweet.name) private tweetModel: Model<TweetDocument>,

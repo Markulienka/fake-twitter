@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { IsString, IsNotEmpty, MinLength, MaxLength, IsMongoId } from 'class-validator';
 
 export class CreateTweetDto {
     @IsString()
@@ -7,6 +7,7 @@ export class CreateTweetDto {
     @MaxLength(280)
     text: string;
 
+    @IsMongoId()
     @IsString()
     @IsNotEmpty()
     userId: string;

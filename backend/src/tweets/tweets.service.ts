@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { TweetDocument } from './schemas/tweet.schema';
+import { TweetDocument } from './tweet.schema';
 import { TweetDto } from './dto/tweet.dto';
 import { CreateTweetDto } from './dto/create-tweet.dto';
-import { Tweet } from './schemas/tweet.schema';
-import { UserService } from '../auth/user.service';
+import { Tweet } from './tweet.schema';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
-export class TweetService {
+export class TweetsService {
   constructor(
-    @InjectModel(Tweet.name) private tweetModel: Model<TweetDocument>,
-    private userService: UserService,
+    @InjectModel(Tweet.name) private tweetsModel: Model<TweetDocument>,
+    private usersService: UsersService,
   ) {}
 
   async getAllTweets(): Promise<TweetDto[]> {
-    const tweets = await this.tweetModel.find().sort({ createdAt: -1 }).exec();
+    const tweets = await this.tweetsModel.find().sort({ createdAt: -1 }).exec();
 
     const tweetResponses = tweets.map((tweet) => ({
       id: tweet.id,
@@ -30,12 +30,12 @@ export class TweetService {
 
   async createTweet(createTweetDto: CreateTweetDto): Promise<TweetDto> {
     const { text, userId } = createTweetDto;
-    const user = await this.userService.findById(userId);
+    const user = await this.usersService.findById(userId);
     if (!user) {
       throw new Error('User not found');
     }
 
-    const newTweet = new this.tweetModel({ 
+    const newTweet = new this.tweetsModel({ 
       text, 
       authorName: user.username,
       userId: userId,
@@ -54,7 +54,10 @@ export class TweetService {
   }
 
   async deleteTweet(id: string): Promise<boolean> {
-    const result = await this.tweetModel.findByIdAndDelete(id);
-    return result !== null;
+    const result = await this.tweetsModel.findByIdAndDelete(id);
+    if (!result) {
+      throw new Error('Tweet not found');
+    }
+    return true;
   }
 }
