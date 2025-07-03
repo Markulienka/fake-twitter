@@ -1,44 +1,30 @@
 import { Controller, Post, Delete, Get, Param, Body, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Types } from 'mongoose';
+
 import { LikesService } from './likes.service';
-import { isValidObjectId } from 'mongoose';
-// import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { LikeTweetParams, UserIdParams, LikeBodyDto } from './dto/like-params-body.dto';
 
 @Controller('likes')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard('jwt'))
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
 
   @Post(':tweetId')
-  async likeTweet(@Param('tweetId') tweetId: string, @Body('userId') userId: string): Promise<{ success: boolean; message: string }> {
-    if (!isValidObjectId(tweetId)) {
-      throw new Error('Invalid tweetId');
-    }
-    if (!isValidObjectId(userId)) {
-      throw new Error('Invalid userId');
-    }
-    await this.likesService.likeTweet(tweetId, userId);
+  async likeTweet(@Param() params: LikeTweetParams, @Body() body: LikeBodyDto): Promise<{ success: boolean; message: string }> {
+    await this.likesService.likeTweet(params.tweetId, body.userId);
     return { success: true, message: 'Tweet liked successfully' };
   }
 
   @Delete(':tweetId')
-  async unlikeTweet(@Param('tweetId') tweetId: string, @Body('userId') userId: string): Promise<{ success: boolean; message: string }> {
-    if (!isValidObjectId(tweetId)) {
-      throw new Error('Invalid tweetId');
-    }
-    if (!isValidObjectId(userId)) {
-      throw new Error('Invalid userId');
-    }
-    await this.likesService.unlikeTweet(tweetId, userId);
+  async unlikeTweet(@Param() params: LikeTweetParams, @Body() body: LikeBodyDto): Promise<{ success: boolean; message: string }> {
+    await this.likesService.unlikeTweet(params.tweetId, body.userId);
     return { success: true, message: 'Tweet unliked successfully' };
   }
 
   @Get('user/:userId')
-  async getUserLikes(@Param('userId') userId: string): Promise<{ likedTweetIds: string[] }> {
-    if (!isValidObjectId(userId)) {
-      throw new Error('Invalid userId');
-    }
-    const likedTweetIds = await this.likesService.getUserLikes(userId);
+  async getUserLikes(@Param() params: UserIdParams): Promise<{ likedTweetIds: Types.ObjectId[] }> {
+    const likedTweetIds = await this.likesService.getUserLikes(params.userId);
     return { likedTweetIds };
   }
 }

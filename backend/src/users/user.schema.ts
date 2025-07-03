@@ -1,7 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { Exclude } from 'class-transformer';
-import { applyBaseSchema } from '../infrastructure/baseSchema/base.schema';
+
+import { BaseSchema, createSchema } from '../infrastructure/mongoose/base.schema';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -9,7 +10,7 @@ export type UserDocument = HydratedDocument<User>;
   timestamps: true,
   collection: 'users'
 })
-export class User {    
+export class User extends BaseSchema {    
     @Prop({ required: true })
     username: string;
 
@@ -21,12 +22,4 @@ export class User {
     passwordHash: string;
 }
 
-export type PublicUser = {
-  id: string;
-  username: string;
-  email: string;
-};
-
-export const UserSchema = SchemaFactory.createForClass(User);
-
-applyBaseSchema(UserSchema);
+export const UserSchema = createSchema(User);

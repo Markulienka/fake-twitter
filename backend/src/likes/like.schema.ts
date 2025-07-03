@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
-import { applyBaseSchema } from '../infrastructure/baseSchema/base.schema';
+import { Types } from 'mongoose';
+
+import { BaseSchema, createSchema } from '../infrastructure/mongoose/base.schema';
 
 export type LikeDocument = HydratedDocument<Like>;
 
@@ -8,16 +10,14 @@ export type LikeDocument = HydratedDocument<Like>;
   timestamps: true,
   collection: 'likes'
 })
-export class Like {  
+export class Like extends BaseSchema {  
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Tweet', required: true })
-  tweetId: string;
+  tweetId: Types.ObjectId;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
-  userId: string;
+  userId: Types.ObjectId;
 }
 
-export const LikeSchema = SchemaFactory.createForClass(Like);
-
-applyBaseSchema(LikeSchema);
+export const LikeSchema = createSchema(Like);
 
 LikeSchema.index({ tweetId: 1, userId: 1 }, { unique: true });

@@ -1,32 +1,28 @@
 import { Controller, Get, Post, Body, Delete, Param, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+
 import { TweetsService } from './tweets.service';
 import { CreateTweetDto } from './dto/create-tweet.dto';
-import { TweetDto } from './dto/tweet.dto';
-import { isValidObjectId } from 'mongoose';
-// import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { DeleteTweetParams } from './dto/delete-tweet.dto';
+import { Tweet } from './tweet.schema';
 
 @Controller('tweets')
-// @UseGuards(JwtAuthGuard)
+@UseGuards(AuthGuard('jwt'))
 export class TweetsController {
   constructor(private readonly tweetsService: TweetsService) {}
 
   @Get()
-  async getAllTweets(): Promise<TweetDto[]> {
+  async getAllTweets(): Promise<Tweet[]> {
     return this.tweetsService.getAllTweets();
   }
   
   @Post()
-  async createTweet(@Body() createTweetDto: CreateTweetDto): Promise<TweetDto> {
+  async createTweet(@Body() createTweetDto: CreateTweetDto): Promise<Tweet> {
     return this.tweetsService.createTweet(createTweetDto);
   }
 
   @Delete(':id')
-  async deleteTweet(@Param('id') id: string): Promise<{ success: boolean }> {
-    if (!isValidObjectId(id)) {
-      throw new Error('Invalid MongoId');
-    }
-    const deleted = await this.tweetsService.deleteTweet(id);
-    return { success: deleted };
+  async deleteTweet(@Param() params: DeleteTweetParams) {
+    return this.tweetsService.deleteTweet(params.id);
   }
 }

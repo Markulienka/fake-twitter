@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ConflictException } from '@nestjs/common';
+import { Types } from 'mongoose';
+
 import { Like, LikeDocument } from './like.schema';
 import { Tweet, TweetDocument } from '../tweets/tweet.schema';
 
@@ -14,7 +17,7 @@ export class LikesService {
   async likeTweet(tweetId: string, userId: string): Promise<void> {
     const existingLike = await this.likeModel.findOne({ tweetId, userId });
     if (existingLike) {
-      throw new Error('Tweet already liked');
+      throw new ConflictException('Tweet already liked');
     }
 
     await this.likeModel.create({ tweetId, userId });
@@ -30,7 +33,7 @@ export class LikesService {
   async unlikeTweet(tweetId: string, userId: string): Promise<void> {
     const existingLike = await this.likeModel.findOne({ tweetId, userId });
     if (!existingLike) {
-      throw new Error('Tweet not liked yet');
+      throw new ConflictException('Tweet not liked yet');
     }
 
     await this.likeModel.deleteOne({ tweetId, userId });
@@ -43,7 +46,7 @@ export class LikesService {
     }
   }
 
-  async getUserLikes(userId: string): Promise<string[]> {
+  async getUserLikes(userId: string): Promise<Types.ObjectId[]> {
     const likes = await this.likeModel.find({ userId }).exec();
     return likes.map(like => like.tweetId);
   }

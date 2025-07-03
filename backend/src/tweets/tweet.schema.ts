@@ -1,6 +1,8 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
-import { applyBaseSchema } from '../infrastructure/baseSchema/base.schema';
+import { Types } from 'mongoose';
+
+import { BaseSchema, createSchema } from '../infrastructure/mongoose/base.schema';
 
 export type TweetDocument = HydratedDocument<Tweet>;
 
@@ -8,7 +10,7 @@ export type TweetDocument = HydratedDocument<Tweet>;
   timestamps: true,
   collection: 'tweets'
 })
-export class Tweet {
+export class Tweet extends BaseSchema {
   @Prop({ required: true })
   text: string;
 
@@ -16,12 +18,11 @@ export class Tweet {
   authorName: string;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
-  userId: string;
+  userId: Types.ObjectId;
 
   @Prop({ default: 0 })
   likesCount: number;
 }
 
-export const TweetSchema = SchemaFactory.createForClass(Tweet);
+export const TweetSchema = createSchema(Tweet);
 
-applyBaseSchema(TweetSchema);
