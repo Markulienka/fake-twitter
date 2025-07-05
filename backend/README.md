@@ -16,6 +16,16 @@ The backend runs at http://localhost:3000
 
 ---
 
+## API Documentation 
+
+The Swagger UI for the backend API is available at:
+
+http://localhost:3000/api
+
+You can find the complete OpenAPI documentation here and test all endpoints directly (including JWT authentication via the Authorize button).
+
+---
+
 ## API Endpoints
 
 ### Authentication

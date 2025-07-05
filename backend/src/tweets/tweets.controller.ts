@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Delete, Param, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { TweetsService } from './tweets.service';
 import { CreateTweetDto } from './dto/create-tweet.dto';
@@ -9,6 +9,7 @@ import { Tweet } from './tweet.schema';
 
 @ApiTags('tweets')
 @Controller('tweets')
+@ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 export class TweetsController {
   constructor(private readonly tweetsService: TweetsService) {}

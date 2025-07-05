@@ -1,13 +1,14 @@
 import { Controller, Post, Delete, Get, Param, Body, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Types } from 'mongoose';
-import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam, ApiBearerAuth } from '@nestjs/swagger';
 
 import { LikesService } from './likes.service';
 import { LikeTweetParams, UserIdParams, LikeBodyDto } from './dto/like-params-body.dto';
 
 @ApiTags('likes')
 @Controller('likes')
+@ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}

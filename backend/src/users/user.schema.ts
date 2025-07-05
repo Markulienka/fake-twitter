@@ -1,7 +1,7 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
 import { Exclude } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiHideProperty } from '@nestjs/swagger';
 
 import { BaseSchema, createSchema } from '../infrastructure/mongoose/base.schema';
 
@@ -20,6 +20,7 @@ export class User extends BaseSchema {
     @Prop({ required: true, unique: [true, "Duplicate email entered"] })
     email: string;
 
+    @ApiHideProperty()
     @Prop({ required: true })
     @Exclude()
     passwordHash: string;
