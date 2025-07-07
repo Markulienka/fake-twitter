@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLogin } from './useLogin';
+import { useSignup } from './useSignup';
 import AuthHeader from '../../components/AuthHeader';
 import LoginForm from '../../components/LoginForm';
 import SignupForm from '../../components/SignUpForm';
@@ -7,16 +8,10 @@ import AuthToggle from '../../components/AuthToggle';
 
 export default function Login() {
   const [isSignUp, setIsSignUp] = useState(false);
-  const { 
-    loginData, 
-    signupData,
-    setLoginData, 
-    setSignupData,
-    handleLogin, 
-    handleSignUp,
-    isLoading, 
-    error 
-  } = useLogin();
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [signupData, setSignupData] = useState({ username: '', email: '', password: '' });
+  const { login, isLoading: isLoginLoading, error: loginError } = useLogin();
+  const { signup, isLoading: isSignupLoading, error: signupError } = useSignup();
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -24,9 +19,9 @@ export default function Login() {
         <AuthHeader isSignUp={isSignUp} />
 
         <div className="bg-white p-6 rounded-lg shadow-md">
-          {error && (
+          {(isSignUp ? signupError : loginError) && (
             <div className="text-red-600 text-sm mb-4">
-              {error}
+              {isSignUp ? signupError : loginError}
             </div>
           )}
 
@@ -34,15 +29,15 @@ export default function Login() {
             <SignupForm 
               signupData={signupData}
               setSignupData={setSignupData}
-              handleSignUp={handleSignUp}
-              isLoading={isLoading}
+              handleSignUp={e => { e.preventDefault(); signup(signupData); }}
+              isLoading={isSignupLoading}
             />
           ) : (
             <LoginForm 
               loginData={loginData}
               setLoginData={setLoginData}
-              handleLogin={handleLogin}
-              isLoading={isLoading}
+              handleLogin={e => { e.preventDefault(); login(loginData); }}
+              isLoading={isLoginLoading}
             />
           )}
 

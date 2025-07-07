@@ -17,16 +17,6 @@ export interface SignupData {
   password: string;
 }
 
-export interface UserData {
-  userId: string | null;
-  username: string | null;
-}
-
-export interface ApiResponse<T> {
-  data: T | null;
-  error: string | null;
-}
-
 export interface AuthResponse {
   token: string;
   user: {

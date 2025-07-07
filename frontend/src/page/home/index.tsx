@@ -6,8 +6,10 @@ export default function Home() {
   const { 
     tweets,  
     likedTweetIds,
-    isLoading, 
-    error, 
+    isLoadingTweets,
+    isLoadingLikes,
+    tweetsError,
+    likesError,
     onAddTweet, 
     handleDelete, 
     toggleLike, 
@@ -28,9 +30,9 @@ export default function Home() {
       </div>
       
       <Input onAddTweet={onAddTweet} />
-      {isLoading && <div>Loading...</div>}
-      {error && <div className="text-red-600 font-bold">Error: {error}</div>}
-      {!isLoading && !error && (
+      {(isLoadingTweets || isLoadingLikes) && <div>Loading...</div>}
+      {(tweetsError || likesError) && <div className="text-red-600 font-bold">Error: {tweetsError || likesError}</div>}
+      {!(isLoadingTweets || isLoadingLikes) && !(tweetsError || likesError) && (
         <ListOfTweets tweets={tweets} onDelete={handleDelete} onToggleLike={toggleLike} likedTweetIds={likedTweetIds}/>
       )}
     </div>
