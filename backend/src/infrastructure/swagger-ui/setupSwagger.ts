@@ -6,7 +6,9 @@ export function setupSwagger(app: INestApplication) {
     .setTitle('Fake Twitter API')
     .setDescription('API documentation for the Fake Twitter application')
     .setVersion('1.0')
-    .addTag('tweets')
+    .addTag('Auth')
+    .addTag('Tweets')
+    .addTag('Likes')
     .addBearerAuth()
     .build();
 

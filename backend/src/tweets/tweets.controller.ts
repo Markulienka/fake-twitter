@@ -7,7 +7,7 @@ import { CreateTweetDto } from './dto/create-tweet.dto';
 import { DeleteTweetParams } from './dto/delete-tweet.dto';
 import { Tweet } from './tweet.schema';
 
-@ApiTags('tweets')
+@ApiTags('Tweets')
 @Controller('tweets')
 @ApiBearerAuth()
 @UseGuards(AuthGuard('jwt'))
@@ -16,14 +16,14 @@ export class TweetsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all tweets' })
-  @ApiResponse({ status: 200, description: 'Returns a list of all tweets' })
+  @ApiResponse({ status: 200, description: 'Returns a list of all tweets', type: [Tweet] })
   async getAllTweets(): Promise<Tweet[]> {
     return this.tweetsService.getAllTweets();
   }
   
   @Post()
   @ApiOperation({ summary: 'Create a new tweet' })
-  @ApiResponse({ status: 201, description: 'The tweet has been successfully created' })
+  @ApiResponse({ status: 201, description: 'The tweet has been successfully created', type: Tweet })
   @ApiBody({ type: CreateTweetDto })
   async createTweet(@Body() createTweetDto: CreateTweetDto): Promise<Tweet> {
     return this.tweetsService.createTweet(createTweetDto);
@@ -31,7 +31,7 @@ export class TweetsController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a tweet by ID' })
-  @ApiResponse({ status: 200, description: 'The tweet has been successfully deleted' })
+  @ApiResponse({ status: 200, description: 'The tweet has been successfully deleted', type: Tweet })
   @ApiParam({ name: 'id', description: 'The unique identifier of the tweet to delete' })
   async deleteTweet(@Param() params: DeleteTweetParams) {
     return this.tweetsService.deleteTweet(params.id);
