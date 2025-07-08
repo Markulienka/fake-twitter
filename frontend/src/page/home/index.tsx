@@ -1,22 +1,16 @@
 import ListOfTweets from "../../components/ListOfTweets";
 import Input from "../../components/Input";
-import { useHome } from "./useHome";
+import { useAuthUser } from './useAuthUser';
+import { useTweets } from './useTweets';
+import { useLikes } from './useLikes';
+import { useTweetActions } from './useTweetActions';
 
 export default function Home() {
-  const { 
-    tweets,  
-    likedTweetIds,
-    isLoadingTweets,
-    isLoadingLikes,
-    tweetsError,
-    likesError,
-    onAddTweet, 
-    handleDelete, 
-    toggleLike, 
-    username,
-    logout 
-  } = useHome();
-
+  const { userId, username, logout } = useAuthUser();
+  const { tweets, fetchTweets, isLoading: isTweetsLoading, error: tweetsError, setError } = useTweets(userId);
+  const { likedTweetIds, fetchUserLikes, isLoading: isLikesLoading, error: likesError } = useLikes(userId);
+  const { onAddTweet, handleDelete, toggleLike } = useTweetActions({ userId, fetchTweets, fetchUserLikes, setError, likedTweetIds });
+  
   return (
     <div className="p-4 max-w-md mx-auto">
       <div className="flex justify-between items-center mb-4">
@@ -30,9 +24,9 @@ export default function Home() {
       </div>
       
       <Input onAddTweet={onAddTweet} />
-      {(isLoadingTweets || isLoadingLikes) && <div>Loading...</div>}
+      {(isTweetsLoading || isLikesLoading) && <div>Loading...</div>}
       {(tweetsError || likesError) && <div className="text-red-600 font-bold">Error: {tweetsError || likesError}</div>}
-      {!(isLoadingTweets || isLoadingLikes) && !(tweetsError || likesError) && (
+      {!(isTweetsLoading || isLikesLoading) && !(tweetsError || likesError) && (
         <ListOfTweets tweets={tweets} onDelete={handleDelete} onToggleLike={toggleLike} likedTweetIds={likedTweetIds}/>
       )}
     </div>
