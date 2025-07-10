@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 
 import { User, UserDocument } from './user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -25,12 +26,31 @@ export class UsersService {
     return await this.userModel.findOne({ username }).exec();
   }
 
-  async findById(id: string): Promise<UserDocument | null> {
+  async findById(id: string): Promise<UserDocument> {
     const user = await this.userModel.findById(id).exec();
     if (!user) {
       throw new Error('User not found');
     }
-    
      return user;
+  }
+
+  async findAllUsers(): Promise<UserDocument[]> {
+    return await this.userModel.find().sort({ createdAt: -1 }).exec();
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    const result = await this.userModel.findByIdAndDelete(id).exec();
+    if (!result) {
+      throw new Error('User not found');
+    }
+    return true;
+  }
+
+  async updateUser(id: string, updateUserDto: UpdateUserDto): Promise<UserDocument> {
+    const user = await this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
+    if (!user) {
+      throw new Error('User not found');
+    }
+    return user;
   }
 }

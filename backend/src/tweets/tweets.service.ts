@@ -8,6 +8,7 @@ import { TweetDocument } from './tweet.schema';
 import { CreateTweetDto } from './dto/create-tweet.dto';
 import { Tweet } from './tweet.schema';
 import { UsersService } from 'src/users/users.service';
+import { UpdateTweetDto } from './dto/update-tweet.dto';
 
 
 @Injectable()
@@ -47,5 +48,21 @@ export class TweetsService {
       throw new NotFoundException('Tweet not found');
     }
     return true;
+  }
+
+  async findTweetById(id: string): Promise<Tweet> {
+      const tweet = await this.tweetsModel.findById(id).exec();
+      if (!tweet) {
+          throw new NotFoundException('Tweet not found');
+      }
+      return plainToInstance(Tweet, tweet.toJSON());
+  }
+  
+  async updateTweet(id: string, updateTweetDto: UpdateTweetDto): Promise<Tweet> {
+      const tweet = await this.tweetsModel.findByIdAndUpdate(id, updateTweetDto, { new: true }).exec();
+      if (!tweet) {
+          throw new NotFoundException('Tweet not found');
+      }
+      return plainToInstance(Tweet, tweet.toJSON());
   }
 }
